@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Swap Shop · LPCUWC</title>
+  <meta name="theme-color" content="#1B6B45">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Shown while the app starts up -->
+  <div id="loading-view" class="center-screen">
+    <p class="muted">Loading…</p>
+  </div>
+
+  <!-- Sign in / create account -->
+  <main id="auth-view" class="center-screen" hidden>
+    <div class="card auth-card">
+      <div class="logo" aria-hidden="true">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h11l-3-3"/><path d="M17 17H6l3 3"/></svg>
+      </div>
+      <h1>Swap Shop</h1>
+      <p class="muted">See what's in the Swap Shop, from anywhere on campus.</p>
+
+      <div class="tabs">
+        <button type="button" id="tab-signin" class="tab active" aria-pressed="true">Sign in</button>
+        <button type="button" id="tab-signup" class="tab" aria-pressed="false">Create account</button>
+      </div>
+
+      <form id="auth-form" novalidate>
+        <label for="auth-email">School email</label>
+        <input id="auth-email" type="email" autocomplete="email" placeholder="you@lpcuwc.edu.hk" required>
+
+        <label for="auth-password">Password</label>
+        <input id="auth-password" type="password" autocomplete="current-password" required>
+        <p id="auth-hint" class="hint" hidden>At least 8 characters. Don't reuse your school password.</p>
+
+        <button type="submit" id="auth-submit" class="btn primary">Sign in</button>
+        <button type="button" id="forgot-btn" class="link-btn">Forgot password?</button>
+        <p id="auth-msg" class="msg" role="status"></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Waiting for the student to verify their email -->
+  <main id="verify-view" class="center-screen" hidden>
+    <div class="card auth-card">
+      <h1>Check your inbox</h1>
+      <p>We sent a link to <strong id="verify-email"></strong>. Open it in Outlook, then come back here.</p>
+      <p class="muted">Can't find it? Look in your Junk folder.</p>
+      <button type="button" id="verified-btn" class="btn primary">I've clicked the link</button>
+      <button type="button" id="resend-btn" class="btn secondary">Send the link again</button>
+      <button type="button" id="verify-signout" class="link-btn">Use a different account</button>
+      <p id="verify-msg" class="msg" role="status"></p>
+    </div>
+  </main>
+
+  <!-- The app itself -->
+  <div id="app-view" hidden>
+    <header class="topbar">
+      <div class="brand">
+        <span class="eyebrow">LPCUWC</span>
+        <span class="brand-title">Swap Shop</span>
+      </div>
+      <div class="topbar-right">
+        <span id="role-badge" class="badge" hidden></span>
+        <button type="button" id="signout-btn" class="btn small secondary">Sign out</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- Leaders only: items students added that still need confirming -->
+      <section id="staff-queue" class="panel" hidden>
+        <h2>Waiting for drop-off</h2>
+        <p class="muted">Students added these. Confirm each one once it's actually in the Swap Shop.</p>
+        <div id="queue-list" class="list"></div>
+      </section>
+
+      <!-- Students only: their own items still waiting for a leader -->
+      <section id="my-submissions" class="panel" hidden>
+        <h2>Your items</h2>
+        <p class="muted">A leader will confirm these once you've dropped them off.</p>
+        <div id="mine-list" class="list"></div>
+      </section>
+
+      <label for="search" class="visually-hidden">Search items</label>
+      <input id="search" type="search" placeholder="Search items" autocomplete="off">
+
+      <div id="chips" class="chips" role="group" aria-label="Filter by category"></div>
+
+      <p id="empty-msg" class="muted empty" hidden>Nothing here yet.</p>
+      <div id="grid" class="grid"></div>
+    </main>
+
+    <button type="button" id="add-btn" class="fab">+ Add item</button>
+  </div>
+
+  <!-- Item details -->
+  <dialog id="item-dialog">
+    <div class="dialog-body">
+      <img id="item-photo" class="item-photo" alt="">
+      <p id="item-cat" class="eyebrow"></p>
+      <h2 id="item-name"></h2>
+      <p id="item-desc"></p>
+      <p id="item-status" class="muted"></p>
+      <div id="item-actions" class="actions"></div>
+      <button type="button" class="btn secondary" data-close>Close</button>
+    </div>
+  </dialog>
+
+  <!-- Add an item -->
+  <dialog id="add-dialog">
+    <form id="add-form" class="dialog-body" novalidate>
+      <h2>Add an item</h2>
+      <p id="add-note" class="muted"></p>
+
+      <label for="add-photo">Photo</label>
+      <input id="add-photo" type="file" accept="image/*" required>
+      <img id="add-preview" class="item-photo" alt="Preview of your photo" hidden>
+
+      <label for="add-name">Item name</label>
+      <input id="add-name" maxlength="80" placeholder="e.g. Desk lamp" required>
+
+      <label for="add-cat">Category</label>
+      <select id="add-cat" required></select>
+
+      <label for="add-desc">Short description</label>
+      <textarea id="add-desc" maxlength="500" rows="3" placeholder="Condition, size, anything useful"></textarea>
+
+      <p id="add-msg" class="msg" role="status"></p>
+      <div class="actions">
+        <button type="button" class="btn secondary" data-close>Cancel</button>
+        <button type="submit" id="add-submit" class="btn primary">Add item</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

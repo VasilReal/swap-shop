@@ -1,0 +1,81 @@
+rules_version = '2';
+
+// Security rules: who is allowed to read and change what.
+// Paste this whole file into Firebase console → Firestore Database → Rules → Publish.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Who is this person? ──
+    function email() {
+      return request.auth.token.email.lower();
+    }
+    // Signed in, email verified, and a school address
+    function isMember() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && email().matches('.*@lpcuwc[.]edu[.]hk');
+    }
+    function roleDoc() {
+      return /databases/$(database)/documents/roles/$(email());
+    }
+    function hasRole(roles) {
+      return isMember() && exists(roleDoc()) && get(roleDoc()).data.role in roles;
+    }
+    function isStaff() {
+      return hasRole(['leader', 'supervisor']);
+    }
+    function isSupervisor() {
+      return hasRole(['supervisor']);
+    }
+
+    // ── What a new item must look like ──
+    function isValidNewItem(d) {
+      return d.keys().hasOnly(['name', 'category', 'description', 'thumb', 'status', 'addedBy', 'addedByEmail', 'createdAt'])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 80
+        && d.category in ['Clothes', 'Bedding', 'Kitchen', 'Books', 'Electronics', 'Other']
+        && d.description is string && d.description.size() <= 500
+        && d.thumb is string && d.thumb.size() < 60000
+        && d.addedBy == request.auth.uid
+        && d.addedByEmail == request.auth.token.email
+        && d.createdAt == request.time;
+    }
+
+    // ── Leaders and supervisors (one document per email) ──
+    match /roles/{roleEmail} {
+      allow read: if isMember() && (roleEmail == email() || isStaff());
+      allow write: if isSupervisor();
+    }
+
+    // ── Items ──
+    match /items/{itemId} {
+      // Everyone sees available items; you also see your own; staff see all
+      allow read: if isMember()
+        && (resource.data.status == 'available' || resource.data.addedBy == request.auth.uid || isStaff());
+
+      // Students' items wait for a leader ("submitted"); staff can add straight to the catalogue
+      allow create: if isMember() && isValidNewItem(request.resource.data)
+        && (request.resource.data.status == 'submitted'
+            || (isStaff() && request.resource.data.status == 'available'));
+
+      // Only staff change the status (confirm, mark taken, put back)
+      allow update: if isStaff()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'statusChangedAt'])
+        && request.resource.data.status in ['available', 'submitted', 'taken']
+        && request.resource.data.statusChangedAt == request.time;
+
+      allow delete: if isStaff();
+    }
+
+    // ── Full-size photos (one per item, same ID as the item) ──
+    match /photos/{itemId} {
+      allow read: if isMember();
+      allow create: if isMember()
+        && request.resource.data.keys().hasOnly(['data', 'addedBy'])
+        && request.resource.data.addedBy == request.auth.uid
+        && request.resource.data.data is string
+        && request.resource.data.data.size() < 900000;
+      allow delete: if isStaff();
+    }
+  }
+}

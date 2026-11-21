@@ -1,0 +1,140 @@
+/* Swap Shop styles. Colours live here at the top so they're easy to change. */
+:root {
+  --green: #1B6B45;
+  --green-dark: #124A30;
+  --green-tint: #E6F0EA;
+  --orange-tint: #FFF3E5;
+  --orange-text: #6B3400;
+  --red: #B42318;
+  --bg: #F7F7F5;
+  --card: #FFFFFF;
+  --line: #E4E4E0;
+  --text: #1A1A1A;
+  --muted: #595959;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1, h2, .brand-title { font-family: "Space Grotesk", sans-serif; }
+h1 { margin: 8px 0; font-size: 32px; }
+h2 { margin: 0 0 4px; font-size: 20px; }
+p { margin: 0 0 8px; }
+
+[hidden] { display: none !important; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--green); margin: 0; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Buttons */
+.btn {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:disabled { opacity: 0.6; cursor: default; }
+.btn.small { min-height: 40px; padding: 0 12px; font-size: 14px; }
+.btn.primary { background: var(--green); color: #fff; }
+.btn.primary:hover { background: var(--green-dark); }
+.btn.secondary { background: #fff; color: var(--text); border-color: #D4D4CF; }
+.btn.danger { background: #fff; color: var(--red); border-color: #E8B4AE; }
+.link-btn { background: none; border: none; color: var(--green); font: inherit; cursor: pointer; padding: 8px; text-decoration: underline; }
+
+/* Forms */
+label { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
+input, select, textarea {
+  width: 100%;
+  font: inherit;
+  padding: 12px 14px;
+  border: 1.5px solid #C9C9C9;
+  border-radius: 12px;
+  background: #fff;
+}
+input:focus, select:focus, textarea:focus, .btn:focus-visible, .chip:focus-visible, .item-card:focus-visible {
+  outline: 3px solid #8CC5A4;
+  outline-offset: 2px;
+}
+.hint { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.msg { min-height: 1.5em; margin-top: 10px; color: var(--red); font-size: 14px; }
+
+/* Sign-in screens */
+.center-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px; }
+.auth-card { width: 100%; max-width: 400px; text-align: center; }
+.auth-card form { text-align: left; }
+.auth-card .btn { width: 100%; margin-top: 12px; }
+.logo { width: 64px; height: 64px; margin: 0 auto; border-radius: 18px; background: var(--green); display: flex; align-items: center; justify-content: center; }
+.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: #F0F0EC; padding: 4px; border-radius: 12px; margin: 20px 0 4px; }
+.tab { min-height: 40px; border: none; border-radius: 9px; background: transparent; font: inherit; font-weight: 500; color: var(--muted); cursor: pointer; }
+.tab.active { background: #fff; color: var(--text); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+/* App layout */
+.topbar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 20px; background: #fff; border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; flex-direction: column; }
+.brand-title { font-size: 22px; font-weight: 700; line-height: 1.1; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.badge { background: var(--orange-tint); color: var(--orange-text); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 99px; }
+
+.content { max-width: 960px; margin: 0 auto; padding: 16px 20px 120px; display: flex; flex-direction: column; gap: 14px; }
+.panel { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.chip { flex: none; min-height: 40px; padding: 0 16px; border-radius: 99px; border: 1.5px solid #D4D4CF; background: #fff; font: inherit; font-size: 14px; cursor: pointer; }
+.chip.active { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px; }
+.item-card {
+  display: flex; flex-direction: column; gap: 2px; padding: 0 0 12px; text-align: left;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+  font: inherit; color: inherit; cursor: pointer;
+}
+.item-card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--green-tint); margin-bottom: 8px; }
+.item-card span { padding: 0 12px; }
+.item-card-name { font-weight: 600; }
+.empty { text-align: center; padding: 40px 0; }
+
+.list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.row { display: flex; align-items: center; gap: 12px; }
+.row-thumb { width: 56px; height: 56px; flex: none; border-radius: 10px; object-fit: cover; background: var(--green-tint); }
+.row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.row-text span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row-actions { display: flex; gap: 6px; }
+
+.fab {
+  position: fixed; right: 20px; bottom: 24px; z-index: 6;
+  min-height: 56px; padding: 0 22px; border: none; border-radius: 99px;
+  background: var(--green); color: #fff; font: inherit; font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18); cursor: pointer;
+}
+
+/* Pop-ups */
+dialog { border: none; border-radius: 20px; padding: 0; width: min(520px, calc(100% - 24px)); max-height: calc(100% - 24px); }
+dialog::backdrop { background: rgba(0,0,0,0.45); }
+.dialog-body { padding: 20px; display: flex; flex-direction: column; gap: 6px; }
+.dialog-body > .btn { margin-top: 8px; }
+.item-photo { width: 100%; max-height: 360px; object-fit: contain; background: var(--green-tint); border-radius: 12px; margin-bottom: 8px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.actions .btn { flex: 1 1 140px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); z-index: 20;
+  background: var(--text); color: #fff; padding: 12px 18px; border-radius: 12px; font-size: 14px;
+}
