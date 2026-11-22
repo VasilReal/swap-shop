@@ -16,6 +16,8 @@ search), adding items, leaders confirming student items and marking items as tak
 | `js/app.js` | Everything the app does |
 | `js/config.js` | Your Firebase settings, plus the list of categories |
 | `firestore.rules` | Security: who can see and change what |
+| `manifest.json` | Lets phones install the app to the home screen (name, colours, icon) |
+| `icon-192.png`, `icon-512.png`, `apple-touch-icon.png` | The app icon in the sizes phones need |
 
 ---
 
@@ -86,3 +88,10 @@ Same as step 6.3: one document in `roles` per person, ID = their email in lower 
   `@lpcuwc.edu.hk` accounts get in, and only leaders can confirm, mark taken or delete.
 - **Verification emails** come from `noreply@...firebaseapp.com`. If students
   can't find theirs, it's probably in Junk.
+
+## Installing the app on a phone
+- **iPhone:** open the app's address in **Safari** → **Share** button (square with an arrow) →
+  **Add to Home Screen** → **Add**. (On iPhone this only works from Safari.)
+- **Android:** open the address in **Chrome** → **⋮** menu → **Install app**
+  (or **Add to Home screen**) → **Install**.
+- The installed app is separate from the browser, so you sign in once more inside it.
